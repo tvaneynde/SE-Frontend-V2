@@ -1,0 +1,42 @@
+name: Deploy to Azure
+
+on:
+  workflow_run:
+    workflows: ["Frontend CI"]
+    types:
+      - completed
+    branches:
+      - main
+
+jobs:
+  deploy:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+    permissions:
+      packages: read
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Configure npm for GitHub Packages
+        run: |
+          echo "@tvaneynde:registry=https://npm.pkg.github.com/" > ~/.npmrc
+          echo "//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}" >> ~/.npmrc
+
+      - name: Download package from GitHub Packages
+        run: |
+          npm pack @tvaneynde/se-frontend@0.0.1
+          mkdir deploy
+          tar -xzf se-frontend-0.0.1.tgz -C deploy --strip-components=1
+
+      - name: Install dependencies
+        working-directory: deploy/package
+        run: npm install --production
+
+      - name: Deploy to Azure Web App
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: projectv2-frontend # replace this with your Azure Web App name
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_1371EDBCDE754B1B83B6B736BFBC8C54 }}
+          package: deploy/package
