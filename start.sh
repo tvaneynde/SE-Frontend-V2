@@ -1,15 +1,13 @@
 #!/bin/bash
 
-echo "=== Cleaning up old deployment files ==="
+# Cleanup old deployments except recently updated ones
+echo "Cleaning up old deployments..."
 
-# Example: delete old deployment files if any
-# You can adjust the folder list as needed
-DEPLOY_PATH="/home/site"
+# Deletes deployment folders older than 1 hour
+find /home/site/deployments -mindepth 1 -maxdepth 1 -type d -not -newermt '-1 hour' -exec rm -rf {} \;
 
-# Clean old deployments, keeping current `wwwroot`
-rm -rf "$DEPLOY_PATH/deployments"/*
-rm -rf "$DEPLOY_PATH/repository"/*
-rm -rf "$DEPLOY_PATH/build"/*
+echo "Old deployments cleaned."
 
-echo "=== Starting the server ==="
-exec node /home/site/wwwroot/standalone/server.js
+# Start the app
+echo "Starting the app..."
+node /home/site/wwwroot/standalone/server.js
