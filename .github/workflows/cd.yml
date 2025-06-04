@@ -41,4 +41,3 @@ jobs:
           app-name: projectv2-frontend # your Azure Web App name
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_1371EDBCDE754B1B83B6B736BFBC8C54 }}
           package: deploy
-          startup-command: "node standalone/server.js"
