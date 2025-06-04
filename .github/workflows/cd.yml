@@ -28,15 +28,16 @@ jobs:
         run: |
           npm pack @tvaneynde/se-frontend@0.0.1
           mkdir deploy
+          # Extract directly into deploy (strip top-level 'package' folder)
           tar -xzf tvaneynde-se-frontend-0.0.1.tgz -C deploy --strip-components=1
 
       - name: Install dependencies
-        working-directory: deploy/package
+        working-directory: deploy
         run: npm install --production
 
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v2
         with:
-          app-name: projectv2-frontend # replace this with your Azure Web App name
+          app-name: projectv2-frontend # your Azure Web App name
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_1371EDBCDE754B1B83B6B736BFBC8C54 }}
-          package: deploy/package
+          package: deploy
