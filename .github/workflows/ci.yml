@@ -54,6 +54,10 @@ jobs:
           -H "Accept: application/vnd.github.v3+json" \
           "https://api.github.com/users/tvaneynde/packages/npm/se-frontend"
 
+      - name: Prepare package for publishing
+        run: |
+          cp -r .next/standalone ./standalone
+
       - name: Publish package to GitHub Packages
         run: npm publish --access public
         env:
