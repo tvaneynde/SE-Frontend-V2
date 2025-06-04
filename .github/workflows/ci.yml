@@ -57,6 +57,7 @@ jobs:
       - name: Prepare package for publishing
         run: |
           cp -r .next/standalone ./standalone
+          cp start.sh ./standalone/
 
       - name: Publish package to GitHub Packages
         run: npm publish --access public

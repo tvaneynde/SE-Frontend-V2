@@ -31,6 +31,9 @@ jobs:
           # Extract directly into deploy (strip top-level 'package' folder)
           tar -xzf tvaneynde-se-frontend-0.0.1.tgz -C deploy --strip-components=1
 
+      - name: Make start script executable
+        run: chmod +x deploy/start.sh
+
       - name: Install dependencies
         working-directory: deploy
         run: npm install --production
