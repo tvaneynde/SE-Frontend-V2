@@ -28,7 +28,7 @@ jobs:
         run: |
           npm pack @tvaneynde/se-frontend@0.0.1
           mkdir deploy
-          tar -xzf se-frontend-0.0.1.tgz -C deploy --strip-components=1
+          tar -xzf tvaneynde-se-frontend-0.0.1.tgz -C deploy --strip-components=1
 
       - name: Install dependencies
         working-directory: deploy/package
