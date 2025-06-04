@@ -61,7 +61,7 @@ jobs:
       - name: Copy startup script into standalone folder
         run: |
           # Make sure startup.sh is executable locally
-          chmod +x start.sh
+          chmod +x startup.sh
 
           # Copy it into the same folder you publish (so it ends up in /standalone)
           cp start.sh .next/standalone/startup.sh
