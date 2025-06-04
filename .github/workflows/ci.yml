@@ -45,32 +45,14 @@ jobs:
           echo "@tvaneynde:registry=https://npm.pkg.github.com/" > ~/.npmrc
           echo "//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}" >> ~/.npmrc
 
-      - name: Delete previous package version 0.0.1
+      - name: delete old package versions
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          REPO_OWNER: tvaneynde
-          REPO_NAME: SE-Frontend-V2
-          PACKAGE_NAME: se-frontend
-          PACKAGE_TYPE: npm
-          VERSION: "0.0.1"
         run: |
-          echo "Getting package versions..."
-          PACKAGE_VERSIONS=$(curl -s -H "Authorization: Bearer $GITHUB_TOKEN" \
-            -H "Accept: application/vnd.github+json" \
-            "https://api.github.com/orgs/$REPO_OWNER/packages/$PACKAGE_TYPE/$PACKAGE_NAME/versions")
-
-          # Extract the ID of the version 0.0.1
-          VERSION_ID=$(echo "$PACKAGE_VERSIONS" | jq -r ".[] | select(.name == \"$VERSION\") | .id")
-
-          if [ -n "$VERSION_ID" ]; then
-            echo "Deleting package version ID: $VERSION_ID"
-            curl -X DELETE -H "Authorization: Bearer $GITHUB_TOKEN" \
-              -H "Accept: application/vnd.github+json" \
-              "https://api.github.com/orgs/$REPO_OWNER/packages/$PACKAGE_TYPE/$PACKAGE_NAME/versions/$VERSION_ID"
-            echo "Deleted version $VERSION"
-          else
-            echo "No previous version $VERSION found"
-          fi
+          curl -s -X DELETE \
+          -H "Authorization: token ${GITHUB_TOKEN}" \
+          -H "Accept: application/vnd.github.v3+json" \
+          "https://api.github.com/orgs/tvaneynde/packages/npm/se-frontend"
 
       - name: Publish package to GitHub Packages
         run: npm publish --access public
