@@ -40,6 +40,11 @@ jobs:
           sleep 10
           # Optionally, add curl or other checks here to verify the app responds
 
+      - name: Configure npm for GitHub Packages
+        run: |
+          echo "@tvaneynde:registry=https://npm.pkg.github.com/" > ~/.npmrc
+          echo "//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}" >> ~/.npmrc
+
       - name: Publish package to GitHub Packages
         run: npm publish --access public
         env:
