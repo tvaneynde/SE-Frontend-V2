@@ -57,6 +57,15 @@ jobs:
       - name: Prepare package for publishing
         run: |
           cp -r .next/standalone ./standalone
+
+      - name: Copy startup script into standalone folder
+        run: |
+          # Make sure startup.sh is executable locally
+          chmod +x start.sh
+
+          # Copy it into the same folder you publish (so it ends up in /standalone)
+          cp start.sh .next/standalone/startup.sh
+
       - name: Publish package to GitHub Packages
         run: npm publish --access public
         env:
